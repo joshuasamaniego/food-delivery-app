@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import styled from 'styled-components';
+
+const AppDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const Contact = styled.div`
+  width: 175px;
+  height: 50px;
+  margin: 50px 0px;
+  margin-right: -500px;
+  border-radius: 18px;
+  background: #f2f2f2;
+  box-shadow: 7px 7px 9px #d7d7d7, -7px -7px 9px #ffffff;
+`
+
+const HeroBackground = styled.div`
+  width: 650px;
+  height: 450px;
+  margin-top: 50px;
+  border-radius: 38px;
+  background: #f2f2f2;
+  box-shadow: 7px 7px 9px #d7d7d7, -7px -7px 9px #ffffff;
+`
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppDiv>
+      <Contact>
+
+      </Contact>
+      <HeroBackground>
+
+      </HeroBackground>
+    </AppDiv>
   );
 }
 
