@@ -11,4 +11,7 @@ body {
   padding: 0;
   box-sizing: border-box;
   background-color: #f2f2f2;
+  font-family: "Barlow Condensed", sans-serif;
+  color: #202225;
+  font-weight: 400;
 }
