@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { setRestaurants } from '../slices/restaurantsSlice';
-import { setTotal } from '../slices/totalSlice';
-// import { Link } from 'react-router-dom';
+import { setCart, updateCart } from '../slices/cartSlice';
 
 function Order() {
     const [current, setCurrent] = useState();
     const [menuItems, setMenuItems] = useState();
+
     const dispatch = useDispatch();
     const restaurants = useSelector(state => state.restaurants);
-    const totalObj = useSelector(state => state.total);
+    const cart = useSelector(state => state.cart);
 
     useEffect(() => {
         fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBIY2p0W20AYqFY9vEzAHiB-lf9uJx4rF0', { method: 'POST' })
@@ -20,6 +20,15 @@ function Order() {
             .then(res => dispatch(setRestaurants(res.data)))
             .catch(err => console.log(err))
     }, [])//eslint-disable-line
+
+
+    const addToCart = (item) => {
+        dispatch(setCart(item))
+    }
+
+    const removeFromCart = (item) => {
+        dispatch(updateCart(item))
+    }
 
     return (
         <OrderDiv>
@@ -47,7 +56,7 @@ function Order() {
                 <MenuItems>
                     {menuItems && menuItems.map(item => {
                         return (
-                            <div key={item.name} onClick={() => setTotal(item)}>
+                            <div key={item.name} onClick={() => addToCart(item)}>
                                 <p>{item.name}</p>
                                 <p>{item.description}</p>
                                 <p>{item.price}</p>
@@ -57,9 +66,20 @@ function Order() {
                 </MenuItems>
             </MenuColumn>
             <TotalColumn>
-                <h2>Your Order</h2>
-                <h2>{`Total: ${totalObj}`}</h2>
-                {console.log(totalObj)};
+                <h2>{current ? `Your Order From ${current.restaurant_name}` : 'Your Order'}</h2>
+                <Cart>
+                    {cart && cart.map(item => {
+                        return (
+                            <div key={item.name} onClick={() => removeFromCart(item)}>
+                                <p>{item.name}</p>
+                                <p>{item.price}</p>
+                            </div>
+                        )
+                    })}
+                </Cart>
+                <Total>
+                    <h2>Total: $0.00</h2>
+                </Total>
             </TotalColumn>
         </OrderDiv>
     )
@@ -113,7 +133,7 @@ const RestColumn = styled.div`
 const RestCard = styled.div`
     display: flex;
     width: 80%;
-    height: 120px;
+    height: auto;
     border: 2px solid #6FD6FF;
     border-radius: 12px;
     background: #f2f2f2;
@@ -137,7 +157,7 @@ const RestCard = styled.div`
 `
 
 const MenuColumn = styled.div`
-    width: 50%;
+    width: 60%;
     height: 100vh;
     overflow-y: scroll;
     display: flex;
@@ -155,14 +175,16 @@ const MenuColumn = styled.div`
 const MenuNav = styled.nav`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-evenly;
     width: 95%;
-    height: 50px;
+    height: auto;
     margin: 10px;
 
     h3 {
         width: 18%;
-        height: 30px;
+        height: auto;
+        padding: 5px 0px;
         border: 2px solid #6FD6FF;
         border-radius: 12px;
         background: #f2f2f2;
@@ -184,9 +206,9 @@ const MenuItems = styled.div`
         flex-direction: row;
         justify-content: center;
         width: 90%;
-        height: 50px;
+        height: auto;
         padding: 5px 0px;
-        margin: 5px auto;
+        margin: 10px auto;
         border: 2px solid #BFF0CF;
         border-radius: 12px;
         background: #f2f2f2;
@@ -206,8 +228,10 @@ const MenuItems = styled.div`
 
 const TotalColumn = styled.div`
     display: flex;
+    flex-direction: column;
+    text-align: center;
     align-items: center;
-    width: 25%;
+    width: 15%;
     height: 100vh;
     background: #f2f2f2;
     box-shadow: 7px 7px 9px #d7d7d7, -7px -7px 9px #ffffff;
@@ -215,6 +239,20 @@ const TotalColumn = styled.div`
     h2 {
         text-transform: uppercase;
     }
+`
+
+const Cart = styled.div`
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: auto;
+        height: 20px;
+    }
+`
+
+const Total = styled.div`
+    display: flex;
 `
 
 export default Order;
