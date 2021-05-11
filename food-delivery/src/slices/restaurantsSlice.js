@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import data from '../data/data.json' // go back to empty array when ready for Production
+import data from '../data/data.json';// go back to empty array when ready for Production
 
 const initialState = {
     restaurants: data.data, // go back to empty array when ready for Production
