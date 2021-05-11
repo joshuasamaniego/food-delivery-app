@@ -2,32 +2,66 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { setRestaurants } from '../slices/restaurantsSlice';
-import { setCart, updateCart } from '../slices/cartSlice';
+import { setCart, updateCart, clearCart} from '../slices/cartSlice';
+import { useHistory } from 'react-router-dom';
 
 function Order() {
+    // component state
     const [current, setCurrent] = useState();
     const [menuItems, setMenuItems] = useState();
-
+    // global utilities
     const dispatch = useDispatch();
+    const history = useHistory();
+
     const restaurants = useSelector(state => state.restaurants);
     const cart = useSelector(state => state.cart);
+    const total = useSelector(state => {
+        let runningTotal = 0;
+        if(state.cart.length >= 1) {
+            state.cart.forEach(item => {
+                runningTotal += (item.price * item.quantity);
+            })
+            return Math.round(100 * runningTotal) / 100;
+        } else {
+            return Math.round(100 * runningTotal) / 100;
+        }
+    })
 
-    useEffect(() => {
-        fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBIY2p0W20AYqFY9vEzAHiB-lf9uJx4rF0', { method: 'POST' })
-            .then(response => response.json())
-            .then(result => fetch(`https://api.documenu.com/v2/restaurants/search/geo?lat=${result.location.lat}&lon=${result.location.lng}&distance=5&key=83f2b023d3c913637c5ec321c4047a0e&fullmenu&size=10`))
-            .then(response => response.json())
-            .then(res => dispatch(setRestaurants(res.data)))
-            .catch(err => console.log(err))
-    }, [])//eslint-disable-line
+    // useEffect(() => {
+    //     fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBIY2p0W20AYqFY9vEzAHiB-lf9uJx4rF0', { method: 'POST' })
+    //         .then(response => response.json())
+    //         .then(result => fetch(`https://api.documenu.com/v2/restaurants/search/geo?lat=${result.location.lat}&lon=${result.location.lng}&distance=5&key=83f2b023d3c913637c5ec321c4047a0e&fullmenu&size=10`))
+    //         .then(response => response.json())
+    //         .then(res => dispatch(setRestaurants(res.data)))
+    //         .catch(err => console.log(err))
+    // }, [])//eslint-disable-line
 
+    const pickRestaurant = (restaurant) => {
+        if(current === restaurant) {
+            return
+        } else {
+            setCurrent(restaurant)
+            setMenuItems()
+            dispatch(clearCart())
+        }
+    }
 
     const addToCart = (item) => {
-        dispatch(setCart(item))
+        const newItem = {
+            ...item,
+            quantity: 1
+        }
+        dispatch(setCart(newItem))
     }
 
     const removeFromCart = (item) => {
         dispatch(updateCart(item))
+    }
+
+    const placeOrder = () => {
+        setMenuItems()
+        dispatch(clearCart())
+        history.push('/confirmation')
     }
 
     return (
@@ -36,7 +70,7 @@ function Order() {
                 <img src="/assets/FoodDeliveryApp.png" alt="Food Delivery App Logo"/>
                 <input type="text" placeholder="Search Restaurants Near Me"/>
                 {restaurants && restaurants.restaurants.map(restaurant => 
-                    <RestCard key={restaurant.address.formatted} onClick={() => setCurrent(restaurant)}>
+                    <RestCard key={restaurant.restaurant_id} onClick={() => pickRestaurant(restaurant)}>
                         <h3>{restaurant.restaurant_name}</h3>
                         <p>{restaurant.address.formatted}</p>
                         <p>{restaurant.restaurant_phone}</p>
@@ -67,19 +101,22 @@ function Order() {
             </MenuColumn>
             <TotalColumn>
                 <h2>{current ? `Your Order From ${current.restaurant_name}` : 'Your Order'}</h2>
-                <Cart>
+                <div>
                     {cart && cart.map(item => {
                         return (
-                            <div key={item.name} onClick={() => removeFromCart(item)}>
+                            <CartDiv key={item.name}>
                                 <p>{item.name}</p>
+                                <p>{item.quantity}</p>
                                 <p>{item.price}</p>
-                            </div>
+                                <Exit onClick={() => removeFromCart(item)}><img src='/assets/icon-close.svg' alt='remove item from cart'/></Exit>
+                            </CartDiv>
                         )
                     })}
-                </Cart>
+                </div>
                 <Total>
-                    <h2>Total: $0.00</h2>
+                    <h2>{`Total: $${total}`}</h2>
                 </Total>
+                <Checkout onClick={() => placeOrder()}>Place Order</Checkout>
             </TotalColumn>
         </OrderDiv>
     )
@@ -238,21 +275,64 @@ const TotalColumn = styled.div`
 
     h2 {
         text-transform: uppercase;
+        height: 100px;
+        width: 90%;
     }
 `
 
-const Cart = styled.div`
-    div {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        width: auto;
-        height: 20px;
-    }
+const CartDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 80%;
+    height: auto;
+    background: #f2f2f2;
+    box-shadow: 7px 7px 9px #d7d7d7, -7px -7px 9px #ffffff;
+    border: 2px solid #BFF0CF;
+    border-radius: 12px;
+    margin: 0 auto;
+
+    &:hover {
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        border: 2px solid #6FD6FF;
+        }
+    
+    transition: all 0.2s ease-in-out;
 `
 
 const Total = styled.div`
     display: flex;
+    height: 75px;
+`
+
+const Checkout = styled.div`
+    width: 80%;
+    height: 50px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    border-radius: 12px;
+    background: #bff0cf;
+    box-shadow: 7px 7px 9px #d7d7d7, -7px -7px 9px #ffffff;
+    text-transform: uppercase;
+    font-size: 20px;
+    padding-top: 2px;
+    margin: 30px auto;
+
+    &:hover {
+        transform: scale(1.03);
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+      }
+    transition: all 0.3s ease-in-out;
+`
+
+const Exit = styled.div`
+    width: 20px;
+    height: 15px;
+    padding: 5px 5px 0px 0px;
 `
 
 export default Order;
