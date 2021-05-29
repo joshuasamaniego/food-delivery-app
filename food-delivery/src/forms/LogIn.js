@@ -1,18 +1,18 @@
-import React from 'react';
-import styles from 'styled-components';
+import React from "react";
+import styles from "styled-components";
 
 const LoginForm = styles.form`
     width: 80%;
-    height: 32%;
+    height: 235px;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-`
+`;
 
 const InputDiv = styles.div`
     display: flex;
     justify-content: space-around;
-`
+`;
 const Input = styles.input`
     width: 150px;
     height: 30px;
@@ -27,7 +27,7 @@ const Input = styles.input`
     &:focus {
         outline: none;
     }
-`
+`;
 
 const Button = styles.button`
     width: 150px;
@@ -39,7 +39,7 @@ const Button = styles.button`
     font-family: "Barlow Condensed", sans-serif;
     font-size: 20px;
     padding-bottom: 2px;
-    margin: 0 auto;
+    margin: 40px auto;
 
     &:hover {
         transform: scale(1.03);
@@ -47,18 +47,22 @@ const Button = styles.button`
         cursor: pointer;
       }
     transition: all 0.3s ease-in-out;
-`
+`;
 
 function Login() {
-    return (
-        <LoginForm>
-            <InputDiv>
-                <label htmlFor="">USERNAME<Input type="text"></Input></label>
-                <label htmlFor="">PASSWORD<Input type="text"></Input></label>
-            </InputDiv>
-            <Button>SUBMIT</Button>
-        </LoginForm>
-    )
+  return (
+    <LoginForm>
+      <InputDiv>
+        <label htmlFor="">
+          USERNAME<Input type="text"></Input>
+        </label>
+        <label htmlFor="">
+          PASSWORD<Input type="text"></Input>
+        </label>
+      </InputDiv>
+      <Button>SUBMIT</Button>
+    </LoginForm>
+  );
 }
 
-export default Login
+export default Login;

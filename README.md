@@ -85,7 +85,7 @@ Backend:
 - [Firebase](https://firebase.google.com/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 
-Apis:
+APIs:
 
 - [Google Maps API](https://developers.google.com/maps)
 - [Google Maps Geolocation API](https://developers.google.com/maps/documentation/geolocation/overview)

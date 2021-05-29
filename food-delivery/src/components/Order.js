@@ -27,21 +27,21 @@ function Order() {
     }
   });
 
-  useEffect(() => {
-    fetch(
-      "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBIY2p0W20AYqFY9vEzAHiB-lf9uJx4rF0",
-      { method: "POST" }
-    )
-      .then((response) => response.json())
-      .then((result) =>
-        fetch(
-          `https://api.documenu.com/v2/restaurants/search/geo?lat=${result.location.lat}&lon=${result.location.lng}&distance=5&key=83f2b023d3c913637c5ec321c4047a0e&fullmenu&size=10`
-        )
-      )
-      .then((response) => response.json())
-      .then((res) => dispatch(setRestaurants(res.data)))
-      .catch((err) => console.log(err));
-  }, []); //eslint-disable-line
+  // useEffect(() => {
+  //   fetch(
+  //     "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBIY2p0W20AYqFY9vEzAHiB-lf9uJx4rF0",
+  //     { method: "POST" }
+  //   )
+  //     .then((response) => response.json())
+  //     .then((result) =>
+  //       fetch(
+  //         `https://api.documenu.com/v2/restaurants/search/geo?lat=${result.location.lat}&lon=${result.location.lng}&distance=5&key=83f2b023d3c913637c5ec321c4047a0e&fullmenu&size=10`
+  //       )
+  //     )
+  //     .then((response) => response.json())
+  //     .then((res) => dispatch(setRestaurants(res.data)))
+  //     .catch((err) => console.log(err));
+  // }, []); //eslint-disable-line
 
   const pickRestaurant = (restaurant) => {
     if (current === restaurant) {
