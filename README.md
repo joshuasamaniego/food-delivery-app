@@ -21,7 +21,7 @@
 <p align="center">
 
   <a href="https://github.com/joshuasamaniego/food-delivery-app">
-    <img src="food-delivery/public/assets/FoodDeliveryApp.png" alt="Logo" width="150" height="150">
+    <img src="food-delivery/public/assets/FoodDeliveryApp.png" alt="Logo" width="250" height="250">
   </a>
 
   <h3 align="center">Food-Delivery-App</h3>
@@ -107,7 +107,7 @@ Apis:
    npm install
    ```
 4. Save your API key in a .env file
-5. npm start
+5. And finally:
    ```sh
    npm start
    ```
@@ -135,6 +135,13 @@ Design Priciples:
 - [Neumorphic Design Generator](https://neumorphism.io/#ddd736/)
 - [Article on Neumorphic Design](https://uxdesign.cc/neumorphism-in-user-interfaces-b47cef3bf3a6/)
 
+Color Scheme:
+[![Color Scheme Screen Shot][color-scheme-screenshot]](food-delivery/public/assets/fda-color-scheme.png)
+
+Fonts:
+
+- [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed)
+
 Food-Delivery-App Logo:
 
 - [Canva](https://www.canva.com/)
@@ -150,3 +157,4 @@ Clever Programmer:
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/joshua-samaniego/
 [product-screenshot]: food-delivery/public/assets/food-delivery-app-welcome-page.png
+[color-scheme-screenshot]: food-delivery/public/assets/fda-color-scheme.png
