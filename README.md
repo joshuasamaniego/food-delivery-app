@@ -14,7 +14,6 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-[![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
@@ -22,7 +21,7 @@
 <p align="center">
 
   <a href="https://github.com/joshuasamaniego/food-delivery-app">
-    <img src="food-delivery/public/assets/FoodDeliveryApp.png" alt="Logo" width="80" height="80">
+    <img src="food-delivery/public/assets/FoodDeliveryApp.png" alt="Logo" width="150" height="150">
   </a>
 
   <h3 align="center">Food-Delivery-App</h3>
@@ -30,7 +29,7 @@
   <p align="center">
     Like this ReadMe template? Click below!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the ReadMe template docs »</strong></a>
     <br />
   </p>
 </p>
@@ -75,17 +74,19 @@ We were allowed to put our own design spin on the project, so I decided to use n
 
 ### Built With
 
-- Frontend:
+Frontend:
+
 - [Reactjs](https://reactjs.org/)
 - [Styled Components](https://styled-components.com/docs/basics)
 - [Google Maps React](https://www.npmjs.com/package/google-maps-react)
 
-- Backend:
+Backend:
+
 - [Firebase](https://firebase.google.com/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
 
-- Apis:
+Apis:
+
 - [Google Maps API](https://developers.google.com/maps)
 - [Google Maps Geolocation API](https://developers.google.com/maps/documentation/geolocation/overview)
 - [Documenu API](https://documenu.com/)
@@ -106,36 +107,46 @@ We were allowed to put our own design spin on the project, so I decided to use n
    npm install
    ```
 4. Save your API key in a .env file
+5. npm start
+   ```sh
+   npm start
+   ```
 
 <!-- LICENSE -->
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License.
 
 <!-- CONTACT -->
 
 ## Contact
 
-Joshua Samaniego - [@joshdavsam](https://twitter.com/joshdavsam) - joshuadsamaniego@gmail.com
+Joshua Samaniego - [@joshdavsam](https://twitter.com/joshdavsam/) - joshuadsamaniego@gmail.com
 
-Project Link: [https://github.com/joshuasamaniego/food-delivery-app](https://github.com/joshuasamaniego/food-delivery-app)
+Project Link: [https://github.com/joshuasamaniego/food-delivery-app](https://github.com/joshuasamaniego/food-delivery-app/)
 
 <!-- ACKNOWLEDGEMENTS -->
 
 ## Acknowledgements
 
-- Design Priciples:
-- [Neumorphic Design Generator](https://neumorphism.io/#ddd736)
-- [Article on Neumorphic Design](https://uxdesign.cc/neumorphism-in-user-interfaces-b47cef3bf3a6)
-- Food-Delivery-App Logo:
+Design Priciples:
+
+- [Neumorphic Design Generator](https://neumorphism.io/#ddd736/)
+- [Article on Neumorphic Design](https://uxdesign.cc/neumorphism-in-user-interfaces-b47cef3bf3a6/)
+
+Food-Delivery-App Logo:
+
 - [Canva](https://www.canva.com/)
+
+Clever Programmer:
+
+- [YouTube Channel](https://www.youtube.com/channel/UCqrILQNl5Ed9Dz6CGMyvMTQ)
+- [Full Stack Mastery Bootcamp](https://www.cleverprogrammer.com/full-stack-mastery-coding-bootcamp/)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/joshua-samaniego/
 [product-screenshot]: food-delivery/public/assets/food-delivery-app-welcome-page.png
