@@ -80,7 +80,7 @@ const Hero = styled.div`
     justify-content: space-evenly;
     width: 100%;
     height: 100px;
-    margin: 30px 0px 60px;
+    margin: 30px 0px 50px;
 
     h2 {
         text-transform: uppercase;
