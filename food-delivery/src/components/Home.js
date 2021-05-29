@@ -180,7 +180,7 @@ const ModalContent = styled.div`
   border-radius: 38px;
   background: #f2f2f2;
   width: 50vw;
-  height: 50vh;
+  height: auto;
 
   hr {
     height: 1px;
@@ -301,7 +301,7 @@ const Button = styled.button`
 const ContactInfo = styled.div`
   width: 100%;
   height: 20px;
-  margin: 10px auto;
+  margin-bottom: 25px;
 
   h4 {
     text-align: center;

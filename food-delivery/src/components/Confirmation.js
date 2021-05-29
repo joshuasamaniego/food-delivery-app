@@ -1,6 +1,8 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { useHistory } from "react-router-dom";
+import firebase from "../firebase.js";
+import "firebase/auth";
 
 // import { Map, GoogleApiWrapper } from 'google-maps-react';
 
@@ -16,8 +18,16 @@ function Confirmation() {
   };
 
   const logOut = () => {
-    localStorage.removeItem("user");
-    history.push("/");
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        localStorage.removeItem("user");
+        history.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const openModal = () => {
@@ -215,7 +225,7 @@ const ModalContent = styled.div`
   border-radius: 38px;
   background: #f2f2f2;
   width: 50vw;
-  height: 50vh;
+  height: auto;
 
   hr {
     height: 1px;
@@ -336,7 +346,11 @@ const Button = styled.button`
 const ContactInfo = styled.div`
   width: 100%;
   height: 20px;
-  margin: 10px auto;
+  margin-bottom: 25px;
+
+  h4 {
+    text-align: center;
+  }
 `;
 
 const Hero = styled.div`
