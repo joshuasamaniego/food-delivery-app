@@ -23,7 +23,7 @@ function Order() {
   // global utilities
   const dispatch = useDispatch();
   const history = useHistory();
-
+  // state accessors
   const restaurants = useSelector((state) => state.restaurants);
   const cart = useSelector((state) => state.cart);
   const total = useSelector((state) => {
@@ -33,7 +33,6 @@ function Order() {
         runningTotal += item.price * item.quantity;
       });
       let tempTotal = Math.round(100 * runningTotal) / 100;
-      console.log(tempTotal.toString().length);
       if (tempTotal.toString().length === 2) {
         return `${tempTotal}.00`;
       } else if (tempTotal.toString().length === 3) {
@@ -128,7 +127,7 @@ function Order() {
     });
     setMenuItems();
     dispatch(setTotal(total));
-    dispatch(setCompany(company.restaurant_name));
+    dispatch(setCompany(company));
     dispatch(setItems(valueToAdd));
     dispatch(clearCart());
     history.push("/confirmation");
@@ -452,6 +451,7 @@ const Incrementer = styled.div`
     margin: 10px 5px;
     padding: 0px 8px;
     transition: all 0.3s ease-in-out;
+    user-select: none;
 
     &:hover {
       transition: all 0.2s ease-in-out;

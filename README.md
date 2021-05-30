@@ -78,7 +78,7 @@ Frontend:
 
 - [Reactjs](https://reactjs.org/)
 - [Styled Components](https://styled-components.com/docs/basics)
-- [Google Maps React](https://www.npmjs.com/package/google-maps-react)
+- [React-Google-Maps/api](https://www.npmjs.com/package/@react-google-maps/api)
 
 Backend:
 

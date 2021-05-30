@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { useHistory } from "react-router-dom";
 import firebase from "../firebase.js";
 import "firebase/auth";
 import { useSelector } from "react-redux";
 
-// import { Map, GoogleApiWrapper } from 'google-maps-react';
-
-const mapStyles = {
-  border: "0",
-};
-
 function Confirmation() {
+  const [lat, setLat] = useState();
+  const [long, setLong] = useState();
   const order = useSelector((state) => state.confirmation);
-  console.log(order);
   const history = useHistory();
+
+  const GoogleAPI = process.env.REACT_APP_GOOGLE_API_KEY;
+  const GoogleMapsAPI = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+  useEffect(() => {
+    fetch(
+      `https://www.googleapis.com/geolocation/v1/geolocate?key=${GoogleAPI}`,
+      { method: "POST" }
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setLat(result.location.lat);
+        setLong(result.location.lng);
+      })
+      .catch((err) => console.log(err));
+  }, []); //eslint-disable-line
+
   const backToOrder = () => {
     history.push("/order");
   };
+
   const logOut = () => {
     firebase
       .auth()
@@ -55,7 +68,7 @@ function Confirmation() {
           <img src="/assets/FoodDeliveryApp.png" alt="Food Delivery App Logo" />
         </Logo>
         <Main>
-          <h1>{`${order.company} Is Preparing Your Order!`}</h1>
+          <h1>{`${order.company.restaurant_name} Is Preparing Your Order!`}</h1>
           <h3>Confirmation #001</h3>
           <Order>{`You ordered ${order.items} item(s) for a total of $${order.total}`}</Order>
           <Hero>
@@ -115,11 +128,16 @@ function Confirmation() {
       </ConfirmationTop>
       <ConfirmationBottom>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d23056.177284102647!2d-105.23550495867879!3d39.98776950717182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1620769486555!5m2!1sen!2sus"
-          style={mapStyles}
-          allowFullScreen=""
-          loading="lazy"
-          title="google"
+          title="map"
+          width="450"
+          height="250"
+          frameBorder="0"
+          style={{ border: 0 }}
+          src={`https://www.google.com/maps/embed/v1/directions?key=${GoogleMapsAPI}
+          &origin=${order.company.geo.lat},${order.company.geo.lon}
+          &destination=${lat},${long}
+          &avoid=tolls|highways`}
+          allowFullScreen
         ></iframe>
       </ConfirmationBottom>
     </Container>
