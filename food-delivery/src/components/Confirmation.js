@@ -75,9 +75,7 @@ function Confirmation() {
             <h2 onClick={backToOrder}>Back To Order Page</h2>
             <h2 onClick={logOut}>Log Out</h2>
           </Hero>
-          <p>
-            Use the map to see tracking information on your delivery driver!
-          </p>
+          <p>Use the map to see information on your delivery driver!</p>
         </Main>
         <Contact>
           <ContactH2 id="button" onClick={openModal}>
@@ -189,6 +187,9 @@ const Main = styled.div`
   }
   h3 {
     height: 20px;
+  }
+  p {
+    margin-bottom: 3px;
   }
 `;
 
