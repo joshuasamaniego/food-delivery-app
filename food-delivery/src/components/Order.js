@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { setRestaurants } from "../slices/restaurantsSlice";
-import { setCart, updateCart, clearCart } from "../slices/cartSlice";
+import { setItems, setCompany, setTotal } from "../slices/confirmationSlice";
+import {
+  setCart,
+  updateCart,
+  clearCart,
+  increase,
+  decrease,
+} from "../slices/cartSlice";
 import { useHistory } from "react-router-dom";
 import firebase from "../firebase.js";
 import "firebase/auth";
@@ -25,31 +32,54 @@ function Order() {
       state.cart.forEach((item) => {
         runningTotal += item.price * item.quantity;
       });
-      return Math.round(100 * runningTotal) / 100;
+      let tempTotal = Math.round(100 * runningTotal) / 100;
+      console.log(tempTotal.toString().length);
+      if (tempTotal.toString().length === 2) {
+        return `${tempTotal}.00`;
+      } else if (tempTotal.toString().length === 3) {
+        if (tempTotal < 100) {
+          return `${tempTotal}0`;
+        } else {
+          return `${tempTotal}.00`;
+        }
+      } else if (tempTotal.toString().length === 4) {
+        if (tempTotal < 10) {
+          return `${tempTotal}`;
+        } else {
+          return `${tempTotal}0`;
+        }
+      } else if (tempTotal.toString().length === 5) {
+        if (tempTotal < 100) {
+          return `${tempTotal}`;
+        } else {
+          return `${tempTotal}0`;
+        }
+      } else {
+        return tempTotal;
+      }
     } else {
       return Math.round(100 * runningTotal) / 100;
     }
   });
 
-  const GoogleAPI = process.env.REACT_APP_GOOGLE_API_KEY;
-  const DocumenuAPI = process.env.DOCUMENU_API_KEY;
-  console.log(GoogleAPI);
+  // const GoogleAPI = process.env.REACT_APP_GOOGLE_API_KEY;
+  // const DocumenuAPI = process.env.REACT_APP_DOCUMENU_API_KEY;
 
-  useEffect(() => {
-    fetch(
-      `https://www.googleapis.com/geolocation/v1/geolocate?key=${GoogleAPI}`,
-      { method: "POST" }
-    )
-      .then((response) => response.json())
-      .then((result) =>
-        fetch(
-          `https://api.documenu.com/v2/restaurants/search/geo?lat=${result.location.lat}&lon=${result.location.lng}&distance=5&key=${DocumenuAPI}&fullmenu&size=10`
-        )
-      )
-      .then((response) => response.json())
-      .then((res) => dispatch(setRestaurants(res.data)))
-      .catch((err) => console.log(err));
-  }, []); //eslint-disable-line
+  // useEffect(() => {
+  //   fetch(
+  //     `https://www.googleapis.com/geolocation/v1/geolocate?key=${GoogleAPI}`,
+  //     { method: "POST" }
+  //   )
+  //     .then((response) => response.json())
+  //     .then((result) =>
+  //       fetch(
+  //         `https://api.documenu.com/v2/restaurants/search/geo?lat=${result.location.lat}&lon=${result.location.lng}&distance=5&key=${DocumenuAPI}&fullmenu&size=10`
+  //       )
+  //     )
+  //     .then((response) => response.json())
+  //     .then((res) => dispatch(setRestaurants(res.data)))
+  //     .catch((err) => console.log(err));
+  // }, []); //eslint-disable-line
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
@@ -87,8 +117,19 @@ function Order() {
     dispatch(updateCart(item));
   };
 
-  const placeOrder = () => {
+  const placeOrder = (cart, company, total) => {
+    const items = cart.map((item) => {
+      let runningItems = 0;
+      runningItems += item.quantity;
+      return runningItems;
+    });
+    const valueToAdd = items.reduce((acc, curr) => {
+      return acc + curr;
+    });
     setMenuItems();
+    dispatch(setTotal(total));
+    dispatch(setCompany(company.restaurant_name));
+    dispatch(setItems(valueToAdd));
     dispatch(clearCart());
     history.push("/confirmation");
   };
@@ -152,10 +193,10 @@ function Order() {
               {user &&
                 `Welcome ${user.displayName ? user.displayName : user.email}!`}
             </h1>
-            <h3>
+            <h2>
               {" "}
-              &#8592; To begin, choose your restaurant from the left sidebar.
-            </h3>
+              &#8592; To begin, choose a restaurant from the left sidebar.
+            </h2>
           </Welcome>
         )}
       </MenuColumn>
@@ -171,7 +212,13 @@ function Order() {
               return (
                 <CartDiv key={item.name}>
                   <p>{item.name}</p>
-                  <p>{item.quantity}</p>
+                  <div>
+                    <p>{item.quantity}</p>
+                    <Incrementer>
+                      <p onClick={() => dispatch(decrease(item))}>-</p>
+                      <p onClick={() => dispatch(increase(item))}>+</p>
+                    </Incrementer>
+                  </div>
                   <p>{item.price}</p>
                   <Exit onClick={() => removeFromCart(item)}>
                     <img
@@ -184,9 +231,17 @@ function Order() {
             })}
         </div>
         <Total>
-          <h2>{`Total: $${total}`}</h2>
+          <h2>{total === 0 ? "Total: $0.00" : `Total: $${total}`}</h2>
         </Total>
-        <Checkout onClick={() => placeOrder()}>Place Order</Checkout>
+        <Checkout
+          onClick={() => {
+            if (total > 0) {
+              placeOrder(cart, current, total);
+            }
+          }}
+        >
+          Place Order
+        </Checkout>
       </TotalColumn>
     </OrderDiv>
   );
@@ -278,11 +333,11 @@ const Welcome = styled.div`
   h1 {
     font-size: 50px;
     text-shadow: -2px -2px 6px #d3d3d3, 20px 20px 60px #ffffff;
-    caret-color: #262626;
   }
 
-  h3 {
+  h2 {
     margin-top: 50px;
+    letter-spacing: 1px;
   }
 `;
 
@@ -374,7 +429,6 @@ const TotalColumn = styled.div`
 
 const CartDiv = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: center;
   width: 80%;
   height: auto;
@@ -382,16 +436,28 @@ const CartDiv = styled.div`
   box-shadow: 7px 7px 9px #d7d7d7, -7px -7px 9px #ffffff;
   border: 2px solid #bff0cf;
   border-radius: 12px;
-  margin: 0 auto;
-
-  &:hover {
-    transform: scale(1.01);
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    border: 2px solid #6fd6ff;
-  }
-
+  margin: 8px auto;
+  padding: 0px 5px;
   transition: all 0.2s ease-in-out;
+`;
+
+const Incrementer = styled.div`
+  display: flex;
+
+  p {
+    border-radius: 50%;
+    background: #bff0cf;
+    box-shadow: inset 20px 20px 60px #a2ccb0, inset -20px -20px 60px #dcffee;
+    font-size: 20px;
+    margin: 10px 5px;
+    padding: 0px 8px;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+  }
 `;
 
 const Total = styled.div`
@@ -425,6 +491,13 @@ const Exit = styled.div`
   width: 20px;
   height: 15px;
   padding: 5px 5px 0px 0px;
+
+  &:hover {
+    transform: scale(1.03);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  transition: all 0.3s ease-in-out;
 `;
 
 export default Order;

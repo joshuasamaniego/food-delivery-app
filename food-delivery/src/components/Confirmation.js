@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { useHistory } from "react-router-dom";
 import firebase from "../firebase.js";
 import "firebase/auth";
+import { useSelector } from "react-redux";
 
 // import { Map, GoogleApiWrapper } from 'google-maps-react';
 
@@ -11,12 +12,12 @@ const mapStyles = {
 };
 
 function Confirmation() {
+  const order = useSelector((state) => state.confirmation);
+  console.log(order);
   const history = useHistory();
-
   const backToOrder = () => {
     history.push("/order");
   };
-
   const logOut = () => {
     firebase
       .auth()
@@ -54,8 +55,9 @@ function Confirmation() {
           <img src="/assets/FoodDeliveryApp.png" alt="Food Delivery App Logo" />
         </Logo>
         <Main>
-          <h1>Thank You For Your Order!</h1>
+          <h1>{`${order.company} Is Preparing Your Order!`}</h1>
           <h3>Confirmation #001</h3>
+          <Order>{`You ordered ${order.items} item(s) for a total of $${order.total}`}</Order>
           <Hero>
             <h2 onClick={backToOrder}>Back To Order Page</h2>
             <h2 onClick={logOut}>Log Out</h2>
@@ -170,6 +172,11 @@ const Main = styled.div`
   h3 {
     height: 20px;
   }
+`;
+
+const Order = styled.p`
+  font-weight: 800;
+  letter-spacing: 1px;
 `;
 
 const Contact = styled.div`
