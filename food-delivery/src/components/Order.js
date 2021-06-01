@@ -27,38 +27,9 @@ function Order() {
   const restaurants = useSelector((state) => state.restaurants);
   const cart = useSelector((state) => state.cart);
   const total = useSelector((state) => {
-    let runningTotal = 0;
-    if (state.cart.length >= 1) {
-      state.cart.forEach((item) => {
-        runningTotal += item.price * item.quantity;
-      });
-      let tempTotal = Math.round(100 * runningTotal) / 100;
-      if (tempTotal.toString().length === 2) {
-        return `${tempTotal}.00`;
-      } else if (tempTotal.toString().length === 3) {
-        if (tempTotal < 100) {
-          return `${tempTotal}0`;
-        } else {
-          return `${tempTotal}.00`;
-        }
-      } else if (tempTotal.toString().length === 4) {
-        if (tempTotal < 10) {
-          return `${tempTotal}`;
-        } else {
-          return `${tempTotal}0`;
-        }
-      } else if (tempTotal.toString().length === 5) {
-        if (tempTotal < 100) {
-          return `${tempTotal}`;
-        } else {
-          return `${tempTotal}0`;
-        }
-      } else {
-        return tempTotal;
-      }
-    } else {
-      return Math.round(100 * runningTotal) / 100;
-    }
+    const total = state.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    return (Math.round(total * 100) / 100).toFixed(2);
   });
 
   // const GoogleAPI = process.env.REACT_APP_GOOGLE_API_KEY;
